@@ -1,0 +1,20 @@
+#turn-sentence {
+  font-size: 32px;
+}
+
+table {
+  border-collapse: collapse;
+  border-style: hidden;
+}
+
+table td {
+  border: 5px solid black;
+  width: 200px;
+  height: 200px;
+  font-size: 100px;
+  text-align: center;
+}
+
+#status {
+  font-size: 32px;
+}
