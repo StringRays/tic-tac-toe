@@ -1,5 +1,6 @@
 #turn-sentence {
   font-size: 32px;
+  visibility: hidden;
 }
 
 table {
@@ -9,6 +10,7 @@ table {
 
 table td {
   border: 5px solid black;
+  background-color: white;
   width: 200px;
   height: 200px;
   font-size: 100px;
