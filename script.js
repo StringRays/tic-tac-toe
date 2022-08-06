@@ -3,15 +3,32 @@ const oh = "O"
 
 
 let boxes = document.getElementsByClassName("marker");
+let boxArray = [...boxes];
+let firstRow = document.getElementsByClassName("first");
+let secondRow = document.getElementsByClassName("second");
+let thirdRow = document.getElementsByClassName("third");
 let titleDisplay = document.getElementById('turn-sentence');
 let start = document.getElementById('play-again');
 let player = document.getElementById('turn');
+let win = document.getElementById('win-display');
+let gameName = document.getElementById('start-banner');
 
 
 
-//initial states at game start
-const makeAppear = (element) => {
-    element.style.visibility = 'visible';
+//changes title display
+const switchDisplay = (changeType) => {
+    if (changeType == 'firstGame') {
+        gameName.style.visibility = 'hidden';
+        titleDisplay.style.visibility = 'visible';
+    } else if (changeType == 'nextGame'){
+        win.style.visibility = 'hidden';
+        titleDisplay.style.visibility = 'visible';
+    } else if (changeType == 'win'){
+        titleDisplay.style.visibility = 'hidden';
+        win.style.visibility = 'visible';
+    } else {
+        //window.alert('there is a problem');
+    }
 }
 
 const highlight = (event) => {
@@ -52,7 +69,27 @@ const setBoard = (list) => {
 }
 
 
-// need to write win conditions
+//--------------------------------------------------------------------------------begin below here trying to fix. 
+const checkRow = (number) => {
+    if (number%3 === 0){
+        //window.alert('Got to checkRow')
+        if (boxArray[number+1].innerHTML == boxArray[number].innerHTML) {
+            window.alert('Got to first')
+            if (boxArray[number+2].innerHTML == boxArray[number].innerHTML){
+                window.alert('Got to switchDisplay')
+                switchDisplay('win');
+            }
+        }
+    }
+}
+
+const checkForWin = (element) => {
+    //window.alert('Got to checkforWin')
+    let number = boxArray.indexOf(element);
+    checkRow(number);
+}
+
+
 
 //also add instructions, etc. 
 
@@ -63,20 +100,24 @@ const setBoard = (list) => {
 
 
 
-
+//need to add clear function
 //sets starting game conditions
 const startGame = () => {
-    makeAppear(titleDisplay);
+    if (win.style.visibility == 'visible') {
+        switchDisplay('nextGame');
+    } else {
+    switchDisplay('firstGame');
     randomSymbol(player);
     setBoard(boxes);
+    }
 }
 
 
-//what happens every turn
+//what happens every turn when  player clicks
 const changeTurn = (event) => {
-    changeSymbol(player);
     event.target.removeEventListener("click", drawSymbol);
-    checkForWin(event);
+    checkForWin(event.target);
+    changeSymbol(player);
 }
 
 

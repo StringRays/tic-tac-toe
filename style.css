@@ -1,6 +1,12 @@
-#turn-sentence {
+#turn-sentence,
+#win-display {
   font-size: 32px;
   visibility: hidden;
+}
+
+#start-banner {
+  font-size: 32px;
+  visibility: visible;
 }
 
 table {
