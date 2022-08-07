@@ -5,7 +5,8 @@
   display: none;
 }
 
-#start-banner {
+#start-banner, 
+#start {
   font-size: 32px;
   display: block;
 }
@@ -24,6 +25,3 @@ table td {
   text-align: center;
 }
 
-#status {
-  font-size: 32px;
-}

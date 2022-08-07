@@ -8,10 +8,14 @@ const start = document.getElementById('play-again');
 const player = document.getElementById('turn');
 const win = document.getElementById('win-display');
 const gameName = document.getElementById('start-banner');
+const score = document.getElementById('status');
 const tie = document.getElementById('tie');
 let currentTurn = 1;
 let wins = 0;
-
+const winStatus = {
+    xWins: 0,
+    oWins: 0
+}
 
 
 //changes title display
@@ -140,6 +144,16 @@ const checkDiag = (element) => {
 }
 
 
+const winTasks = () => {
+        if (player.innerHTML == ex) {
+            winStatus.xWins = winStatus.xWins+1;
+        } else {
+            winStatus.oWins = winStatus.oWins+1;
+        }
+        switchDisplay('win');
+        score.innerHTML = `${ex}: ${winStatus.xWins} ${oh}: ${winStatus.oWins}`;
+}
+
 //sets conditions when player clicks new game
 const startGame = () => {
     if (titleDisplay.style.display == "block"){
@@ -154,8 +168,6 @@ const startGame = () => {
     setBoard();
 }
 
-
-
 //what happens every turn when  player clicks
 const changeTurn = (event) => {
     currentTurn +=1;
@@ -163,16 +175,16 @@ const changeTurn = (event) => {
     if (boxArray.indexOf(event.target)%2 == 0){
         if (boxArray[4].innerHTML == player.innerHTML){
             if (checkDiag(event.target)){
-                switchDisplay('win');
+                winTasks();
                 newWin++;
             };        
         }
     }
     if (checkRow(event.target)){
-        switchDisplay('win');
+        winTasks();
         newWin++;
     } else if (checkCols(event.target)) {
-        switchDisplay('win');
+        winTasks();
         newWin++;
     } else {
     changeSymbol(player);
@@ -181,12 +193,11 @@ const changeTurn = (event) => {
         if (newWin == 0){ 
         switchDisplay('tie');
         clear();
-        }
-    
+        }    
     }
+
     event.target.removeEventListener("click", drawSymbol);
     event.target.removeEventListener("click", changeTurn);
-    console.log(currentTurn)
 }
 
 document.getElementById('play-again').addEventListener('click', startGame);
