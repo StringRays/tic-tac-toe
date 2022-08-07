@@ -25,7 +25,6 @@ const switchDisplay = (changeType) => {
         win.style.display = 'none';
         titleDisplay.style.display = 'block';
     } else if (changeType == 'win'){
-        wins++;
         tie.style.display = 'none';
         titleDisplay.style.display = 'none';
         win.style.display = 'block';
@@ -74,6 +73,7 @@ const setBoard = () => {
     }
 }
 
+//removes ability to click on boxes and do things
 const clear = () => {
     for (let i = 0; i < boxArray.length; i++){
         let newItem = boxArray[i];
@@ -84,6 +84,7 @@ const clear = () => {
     }
 }
 
+//clears boxes
 const empty = () => {
     for (let i = 0; i < boxArray.length; i++){
         let newItem = boxArray[i];
@@ -142,7 +143,7 @@ const checkDiag = (element) => {
     return answer;
 }
 
-
+//updates scorecard and title
 const winTasks = () => {
         if (player.innerHTML == ex) {
             winStatus.xWins = winStatus.xWins+1;
