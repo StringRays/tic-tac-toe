@@ -11,7 +11,6 @@ const gameName = document.getElementById('start-banner');
 const score = document.getElementById('status');
 const tie = document.getElementById('tie');
 let currentTurn = 1;
-let wins = 0;
 const winStatus = {
     xWins: 0,
     oWins: 0
