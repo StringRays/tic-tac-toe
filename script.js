@@ -136,7 +136,7 @@ const checkDiag = (element) => {
             answer = true;
         }
     } else {
-        if (boxArray[2].innerHTML == player.innerHTML && boxArray[6].innerHTML){
+        if (boxArray[2].innerHTML == player.innerHTML && boxArray[6].innerHTML == player.innerHTML){
             answer = true;
         }
     }
