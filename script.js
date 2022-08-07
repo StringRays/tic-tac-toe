@@ -1,33 +1,36 @@
 const ex = "X"  //change these two lines to change player symbols on board and in title
 const oh = "O"
 
-
-let boxes = document.getElementsByClassName("marker");
-let boxArray = [...boxes];
-let firstRow = document.getElementsByClassName("first");
-let secondRow = document.getElementsByClassName("second");
-let thirdRow = document.getElementsByClassName("third");
-let titleDisplay = document.getElementById('turn-sentence');
-let start = document.getElementById('play-again');
-let player = document.getElementById('turn');
-let win = document.getElementById('win-display');
-let gameName = document.getElementById('start-banner');
+const boxes = document.getElementsByClassName("marker");
+const boxArray = [...boxes];
+const titleDisplay = document.getElementById('turn-sentence');
+const start = document.getElementById('play-again');
+const player = document.getElementById('turn');
+const win = document.getElementById('win-display');
+const gameName = document.getElementById('start-banner');
+const tie = document.getElementById('tie');
+let currentTurn = 1;
+let wins = 0;
 
 
 
 //changes title display
 const switchDisplay = (changeType) => {
-    if (changeType == 'firstGame') {
-        gameName.style.visibility = 'hidden';
-        titleDisplay.style.visibility = 'visible';
-    } else if (changeType == 'nextGame'){
-        win.style.visibility = 'hidden';
-        titleDisplay.style.visibility = 'visible';
+    if (changeType == 'newGame') {
+        tie.style.display = 'none';
+        gameName.style.display = 'none';
+        win.style.display = 'none';
+        titleDisplay.style.display = 'block';
     } else if (changeType == 'win'){
-        titleDisplay.style.visibility = 'hidden';
-        win.style.visibility = 'visible';
+        wins++;
+        tie.style.display = 'none';
+        titleDisplay.style.display = 'none';
+        win.style.display = 'block';
+        clear();
     } else {
-        //window.alert('there is a problem');
+        win.style.display = 'none';
+        titleDisplay.style.display = 'none';
+        tie.style.display = 'block';
     }
 }
 
@@ -58,9 +61,9 @@ const changeSymbol = (element) => {
 
 
 //initializes board
-const setBoard = (list) => {
-    for (let i = 0; i < list.length; i++){
-        let newItem = list[i];
+const setBoard = () => {
+    for (let i = 0; i < boxArray.length; i++){
+        let newItem = boxArray[i];
         newItem.addEventListener("click", drawSymbol);
         newItem.addEventListener("click", changeTurn);
         newItem.addEventListener("mouseover", highlight);
@@ -68,60 +71,122 @@ const setBoard = (list) => {
     }
 }
 
+const clear = () => {
+    for (let i = 0; i < boxArray.length; i++){
+        let newItem = boxArray[i];
+        newItem.removeEventListener("click", drawSymbol);
+        newItem.removeEventListener("click", changeTurn);
+        newItem.removeEventListener("mouseover", highlight);
+        newItem.removeEventListener("mouseleave", stopHighlight);
+    }
+}
 
-//--------------------------------------------------------------------------------begin below here trying to fix. 
-const checkRow = (number) => {
-    if (number%3 === 0){
-        //window.alert('Got to checkRow')
-        if (boxArray[number+1].innerHTML == boxArray[number].innerHTML) {
-            window.alert('Got to first')
-            if (boxArray[number+2].innerHTML == boxArray[number].innerHTML){
-                window.alert('Got to switchDisplay')
-                switchDisplay('win');
-            }
+const empty = () => {
+    for (let i = 0; i < boxArray.length; i++){
+        let newItem = boxArray[i];
+        newItem.innerHTML = "";
+        currentTurn = 1;
+    }
+}
+
+//checks if all row elements are equal to player symbol, displays win if so
+const checkRow = (element) => {
+    let answer = false;
+    let number = boxArray.indexOf(element);
+    let newNumber = Math.floor(number/3)*3;
+    if (boxArray[newNumber].innerHTML == player.innerHTML) {
+        newNumber++;
+        if (boxArray[newNumber].innerHTML == player.innerHTML) {
+            newNumber++;
+            if (boxArray[newNumber].innerHTML == player.innerHTML) {
+                answer = true;
+             }
         }
     }
+    return answer;
 }
 
-const checkForWin = (element) => {
-    //window.alert('Got to checkforWin')
+//checks if all elements in column are equal to player symbol
+const checkCols = (element) => {
+    let answer = false;
     let number = boxArray.indexOf(element);
-    checkRow(number);
-}
-
-
-
-//also add instructions, etc. 
-
-
-
-
-
-
-
-
-//need to add clear function
-//sets starting game conditions
-const startGame = () => {
-    if (win.style.visibility == 'visible') {
-        switchDisplay('nextGame');
-    } else {
-    switchDisplay('firstGame');
-    randomSymbol(player);
-    setBoard(boxes);
+    let newNumber = number%3;
+    if (boxArray[newNumber].innerHTML == player.innerHTML) {
+        newNumber += 3;
+        if (boxArray[newNumber].innerHTML == player.innerHTML) {
+            newNumber += 3;
+            if (boxArray[newNumber].innerHTML == player.innerHTML) {
+                answer = true;
+             }
+        }
     }
+    return answer;
 }
+
+//checks if either diagonal are all equal to player symbol
+const checkDiag = (element) => {
+    let answer = false;
+    let number = boxArray.indexOf(element);
+    if(number%4 == 0){
+        if (boxArray[0].innerHTML == player.innerHTML && boxArray[8].innerHTML == player.innerHTML){
+            answer = true;
+        }
+    } else {
+        if (boxArray[2].innerHTML == player.innerHTML && boxArray[6].innerHTML){
+            answer = true;
+        }
+    }
+    return answer;
+}
+
+
+//sets conditions when player clicks new game
+const startGame = () => {
+    if (titleDisplay.style.display == "block"){
+        clear();
+        empty();
+    }
+    if (win.style.display == "block" || tie.style.display == "block"){
+        empty();
+    }
+    switchDisplay('newGame');
+    randomSymbol(player);
+    setBoard();
+}
+
 
 
 //what happens every turn when  player clicks
 const changeTurn = (event) => {
-    event.target.removeEventListener("click", drawSymbol);
-    checkForWin(event.target);
+    currentTurn +=1;
+    let newWin = 0;
+    if (boxArray.indexOf(event.target)%2 == 0){
+        if (boxArray[4].innerHTML == player.innerHTML){
+            if (checkDiag(event.target)){
+                switchDisplay('win');
+                newWin++;
+            };        
+        }
+    }
+    if (checkRow(event.target)){
+        switchDisplay('win');
+        newWin++;
+    } else if (checkCols(event.target)) {
+        switchDisplay('win');
+        newWin++;
+    } else {
     changeSymbol(player);
+    }
+    if (currentTurn == 10){
+        if (newWin == 0){ 
+        switchDisplay('tie');
+        clear();
+        }
+    
+    }
+    event.target.removeEventListener("click", drawSymbol);
+    event.target.removeEventListener("click", changeTurn);
+    console.log(currentTurn)
 }
 
-
 document.getElementById('play-again').addEventListener('click', startGame);
-
-
-

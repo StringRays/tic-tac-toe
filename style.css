@@ -1,12 +1,13 @@
 #turn-sentence,
-#win-display {
+#win-display,
+#tie {
   font-size: 32px;
-  visibility: hidden;
+  display: none;
 }
 
 #start-banner {
   font-size: 32px;
-  visibility: visible;
+  display: block;
 }
 
 table {
