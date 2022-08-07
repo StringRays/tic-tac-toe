@@ -1,2 +1,4 @@
 # tic-tac-toe
-A simple Tic Tac Toe Game
+
+
+[Play here](https://stringrays.github.io/tic-tac-toe/)
